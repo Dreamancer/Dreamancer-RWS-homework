@@ -1,7 +1,7 @@
 # Dreamancer-RWS-homework
 My implementation of the entry assignment
 
-# The assignment:
+## The assignment:
 Instructions
 
 Attached, please find a console application which main purpose is to convert the formats.
