@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
-using Moravia.Homework.Attributes;
+﻿using Moravia.Homework.Attributes;
 using Moravia.Homework.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace Moravia.Homework.DAL
 {
@@ -18,14 +18,19 @@ namespace Moravia.Homework.DAL
         throw new ArgumentNullException(nameof(settings));
       }
 
-      if (settings.DocumentRepoType == null)
+      if (String.IsNullOrWhiteSpace(settings.DocumentRepoTypeName))
       {
-        throw new ArgumentNullException(nameof(settings.DocumentRepoType));
+        throw new ArgumentNullException(nameof(settings.DocumentRepoTypeName));
       }
 
-      Type repoType = settings.DocumentRepoType;
+      Type repoType = Type.GetType(settings.DocumentRepoTypeName);
 
-      if(!repoType.IsSubclassOf(typeof(IDocumentRepo))) 
+      if (repoType == null)
+      {
+        throw new ArgumentException(nameof(settings.DocumentRepoTypeName));
+      }
+
+      if (!repoType.GetInterfaces().Contains(typeof(IDocumentRepo)))
       {
         throw new ArgumentException($"Invalid Type {repoType}");
       }

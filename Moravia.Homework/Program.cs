@@ -4,7 +4,8 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moravia.Homework.Settings;
-using Microsoft.Extensions.Logging;
+//using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Moravia.Homework
 {
@@ -24,13 +25,20 @@ namespace Moravia.Homework
     }
     private static void ConfigureServices(ServiceCollection serviceCollection, IConfiguration configuration)
     {
-      serviceCollection.AddLogging(configure =>
-      {
-        configure.AddConfiguration(configuration.GetSection("LoggingSettings"));
-       // configure.AddConsole();
-      });
-      serviceCollection.AddOptions<ConvertorAppSettings>().Bind(configuration.GetSection("ConvertorAppSettings"));
-      serviceCollection.AddTransient<DocumentConvertorApp>();
+      Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(configuration)
+            .CreateLogger();
+      serviceCollection
+        //  .AddLogging(loggerBuilder =>
+        //{
+
+
+        //  //loggerConf.AddConfiguration(configuration.GetSection("LoggingSettings"));
+        //  // configure.AddConsole();
+        //  loggerBuilder.AddSerilog(logger, dispose: true);
+        //})
+        .AddTransient<DocumentConvertorApp>()
+        .AddOptions<ConvertorAppSettings>().Bind(configuration.GetSection("ConvertorAppSettings"));
     }
   }
 }

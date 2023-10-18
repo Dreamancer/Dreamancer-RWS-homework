@@ -10,7 +10,7 @@ namespace Moravia.Homework.Settings
   public class ConvertSettings
   {
     public DocumentRepoSettings RepoSettings { get; set; }
-    public Type SerializerType { get; set; }
-    public Type DocumentType { get; set; }
+    public string SerializerTypeName { get; set; }
+    public string DocumentTypeName { get; set; }
   }
 }

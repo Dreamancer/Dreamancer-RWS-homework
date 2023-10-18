@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Moravia.Homework.Models;
+﻿using Moravia.Homework.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Serilog;
+
 
 namespace Moravia.Homework.Serialization
 {
@@ -19,18 +20,20 @@ namespace Moravia.Homework.Serialization
     {
       try
       {
-        //_logger
+        _logger.Debug($"input xml string:\n{obj}");
 
         XmlSerializer serializer = new XmlSerializer(_documentType);
 
-        using (StringReader sr = new StringReader(obj))
+        XDocument xdoc = XDocument.Parse(obj);
+
+        using (StringReader sr = new StringReader(xdoc.Root.Value))
         {
           return (IDocument)serializer.Deserialize(sr);
         }
       }
       catch (Exception ex)
       {
-        _logger.LogError(ex, $"Error deserializing XML string into {_documentType}");
+        _logger.Error(ex, $"Error deserializing xml string into {_documentType}");
         throw;
       }
     }
@@ -47,11 +50,13 @@ namespace Moravia.Homework.Serialization
           serializer.Serialize(sw, obj);
         }
 
+        _logger.Debug($"Serialized xml string:\n{result}");
+
         return result.ToString();
       }
       catch (Exception ex)
       {
-        _logger.LogError(ex, $"Error serializing {_documentType} to XML");
+        _logger.Error(ex, $"Error serializing {_documentType} to xml");
         throw;
       }
     }

@@ -9,7 +9,7 @@ namespace Moravia.Homework.Settings
 {
   public class DocumentRepoSettings
   {
-    public Type DocumentRepoType { get; set; }
+    public string DocumentRepoTypeName { get; set; }
     public DocumentRepoMode Mode { get; set; }
     public string? Location { get; set; }
   }

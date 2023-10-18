@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
-using Moravia.Homework.Models;
+﻿using Moravia.Homework.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace Moravia.Homework.Serialization
 {
@@ -20,10 +20,11 @@ namespace Moravia.Homework.Serialization
         throw new ArgumentNullException(nameof(documentType));
       }
 
-      if (!documentType.IsSubclassOf(typeof(IDocument)))
+      if (!documentType.GetInterfaces().Contains(typeof(IDocument)))
       {
-        throw new ArgumentException($"Invalid document type {typeof(IDocument)}");
+        throw new ArgumentException($"Invalid document type {documentType}");
       }
+
       _documentType = documentType;
       _logger = logger;
     }
