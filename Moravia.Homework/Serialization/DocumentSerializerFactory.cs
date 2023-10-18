@@ -1,4 +1,5 @@
-﻿using Moravia.Homework.Attributes;
+﻿using Microsoft.Extensions.Logging;
+using Moravia.Homework.Attributes;
 using Moravia.Homework.Settings.Enum;
 using System;
 using System.Collections.Generic;
@@ -10,21 +11,14 @@ namespace Moravia.Homework.Serialization
 {
   public static class DocumentSerializerFactory
   {
-    public static IDocumentSerializer GetDocumentSerializer(ConvertFileType fileType, Type documentType)
+    public static IDocumentSerializer GetDocumentSerializer(Type serializerType, Type documentType, ILogger logger)
     {
-      Type typeToCreate = fileType.GetTypeToCreateAttribute()?.TypeToCreate;
-
-      if (typeToCreate == null)
+      if (!serializerType.IsSubclassOf(typeof(IDocumentSerializer)))
       {
-        throw new ArgumentException($"Invalid enum value {fileType}");
+        throw new ArgumentException($"Invalid serializer type to create: '{serializerType}'");
       }
 
-      if (!typeToCreate.IsSubclassOf(typeof(IDocumentSerializer)))
-      {
-        throw new ArgumentException($"Invalid type to create {typeToCreate}");
-      }
-
-      return (IDocumentSerializer)Activator.CreateInstance(typeToCreate, documentType);
+      return (IDocumentSerializer)Activator.CreateInstance(serializerType, documentType, logger);
     }
   }
 }

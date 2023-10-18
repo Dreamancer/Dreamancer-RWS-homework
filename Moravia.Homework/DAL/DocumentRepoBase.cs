@@ -1,4 +1,5 @@
-﻿using Moravia.Homework.Settings;
+﻿using Microsoft.Extensions.Logging;
+using Moravia.Homework.Settings;
 using Moravia.Homework.Settings.Enum;
 using System;
 using System.Collections.Generic;
@@ -14,12 +15,15 @@ namespace Moravia.Homework.DAL
 
     public string Location { get; protected set; }
 
+    
+    protected readonly ILogger _logger;
+
     /// <summary>
     /// Base class constructor using basic arguments
     /// </summary>
     /// <param name="mode">I/O mode of the repo</param>
     /// <param name="location">location of source/target file.</param>
-    public DocumentRepoBase(DocumentRepoMode mode, string? location)
+    public DocumentRepoBase(DocumentRepoMode mode, string? location, ILogger logger)
     {
       if (String.IsNullOrWhiteSpace(location))
       {
@@ -28,6 +32,8 @@ namespace Moravia.Homework.DAL
 
       Mode = mode;
       Location = location;
+
+      _logger = logger;
     }
 
     public DocumentRepoBase(DocumentRepoSettings settings)

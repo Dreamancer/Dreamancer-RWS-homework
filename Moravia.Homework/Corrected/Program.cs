@@ -43,7 +43,7 @@ namespace Moravia.Homework.Corrected
 
         Console.WriteLine($"Parsed input XML doc: {xdoc}");
 
-        //if xdoc doesn't contain neither of 'title' or 'text' the following code will throw an exception
+        //if xdoc doesn't contain either of 'title' nor 'text' the following code will throw an exception
         //but IMO there is no need to check for that anyway because in such an event we'll have logged xdoc and will know what is missing either way.
         //and I don't suppose a correctly parsed XDocument instance won't have a Root element despite the property itself being defined as nullable
         var doc = new Document

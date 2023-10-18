@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Moravia.Homework.Settings
 {
-    public class DocumentRepoSettings
+  public class DocumentRepoSettings
   {
-    public DocumentRepoType? RepoType { get; set; }
+    public Type DocumentRepoType { get; set; }
     public DocumentRepoMode Mode { get; set; }
     public string? Location { get; set; }
   }

@@ -1,4 +1,5 @@
-﻿using Moravia.Homework.Models;
+﻿using Microsoft.Extensions.Logging;
+using Moravia.Homework.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,18 +12,40 @@ namespace Moravia.Homework.Serialization
 {
   public class JsonDocumentSerializer : DocumentSerializerBase
   {
-    public JsonDocumentSerializer(Type documentType) :base(documentType)
+    public JsonDocumentSerializer(Type documentType, ILogger logger) : base(documentType, logger)
     {
     }
 
     public override IDocument DeserializeDocument(string obj)
     {
-      return (IDocument)JsonConvert.DeserializeObject(obj, _documentType);
+      try
+      {
+        _logger.LogDebug($"Input json string:\n{obj}");
+
+        return (IDocument)JsonConvert.DeserializeObject(obj, _documentType);
+      }
+      catch (Exception ex)
+      {
+        _logger.LogError(ex, $"Error deserializing json string into {_documentType}");
+        throw;
+      }
     }
 
     public override string SerializeDocument(IDocument obj)
     {
-      return JsonConvert.SerializeObject(obj);
+      try
+      {
+        string jsonString = JsonConvert.SerializeObject(obj);
+
+        _logger.LogDebug($"Serialized json string:\n{jsonString}");
+
+        return jsonString;
+      }
+      catch (Exception ex)
+      {
+        _logger.LogError(ex, $"Error serializing {_documentType} to json");
+        throw;
+      }
     }
   }
 }

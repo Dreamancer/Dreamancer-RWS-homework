@@ -1,4 +1,5 @@
-﻿using Moravia.Homework.Attributes;
+﻿using Microsoft.Extensions.Logging;
+using Moravia.Homework.Attributes;
 using Moravia.Homework.Settings;
 using System;
 using System.Collections.Generic;
@@ -10,31 +11,26 @@ namespace Moravia.Homework.DAL
 {
   internal static class DocumentRepoFactory
   {
-    public static IDocumentRepo GetDocumentRepo(DocumentRepoSettings settings)
+    public static IDocumentRepo GetDocumentRepo(DocumentRepoSettings settings, ILogger logger)
     {
       if (settings == null)
       {
         throw new ArgumentNullException(nameof(settings));
       }
 
-      if (settings.RepoType == null)
+      if (settings.DocumentRepoType == null)
       {
-        throw new ArgumentNullException(nameof(settings.RepoType));
+        throw new ArgumentNullException(nameof(settings.DocumentRepoType));
       }
 
-      Type? repoType = settings.RepoType.GetTypeToCreateAttribute()?.TypeToCreate;
-
-      if (repoType == null)
-      {
-        throw new ArgumentException($"Invalid enum value {settings.RepoType}");
-      }
+      Type repoType = settings.DocumentRepoType;
 
       if(!repoType.IsSubclassOf(typeof(IDocumentRepo))) 
       {
         throw new ArgumentException($"Invalid Type {repoType}");
       }
 
-      return (IDocumentRepo)Activator.CreateInstance(repoType, settings);
+      return (IDocumentRepo)Activator.CreateInstance(repoType, settings, logger);
     }
   }
 }

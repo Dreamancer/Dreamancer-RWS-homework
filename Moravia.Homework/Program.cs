@@ -27,7 +27,7 @@ namespace Moravia.Homework
       serviceCollection.AddLogging(configure =>
       {
         configure.AddConfiguration(configuration.GetSection("LoggingSettings"));
-        configure.AddConsole();
+       // configure.AddConsole();
       });
       serviceCollection.AddOptions<ConvertorAppSettings>().Bind(configuration.GetSection("ConvertorAppSettings"));
       serviceCollection.AddTransient<DocumentConvertorApp>();

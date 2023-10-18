@@ -1,4 +1,5 @@
-﻿using Moravia.Homework.Settings;
+﻿using Microsoft.Extensions.Logging;
+using Moravia.Homework.Settings;
 using Moravia.Homework.Settings.Enum;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Moravia.Homework.DAL
 {
-    internal class FileSystemDocumentRepo : DocumentRepoBase
+  internal class FileSystemDocumentRepo : DocumentRepoBase
   {
 
-    public FileSystemDocumentRepo(DocumentRepoMode mode, string? location) : base(mode, location)
+    public FileSystemDocumentRepo(DocumentRepoMode mode, string? location, ILogger logger) : base(mode, location, logger)
     {
       if (!File.Exists(Location) && Mode == DocumentRepoMode.Read)
       {
@@ -33,7 +34,9 @@ namespace Moravia.Homework.DAL
       {
         throw new InvalidOperationException($"Only possible in 'Read' mode");
       }
-      //todo logging
+
+      _logger.LogInformation($"Reading content from source file at '{Location}'");
+
       try
       {
         using (var reader = new StreamReader(Location, new FileStreamOptions { Mode = FileMode.Open }))
@@ -43,7 +46,7 @@ namespace Moravia.Homework.DAL
       }
       catch (Exception ex)
       {
-        //todo
+        _logger.LogError(ex, $"Error reading content from source file");
         throw;
       }
     }
@@ -54,6 +57,9 @@ namespace Moravia.Homework.DAL
       {
         throw new InvalidOperationException($"Only possible in 'Write' mode");
       }
+
+      _logger.LogInformation($"Writing content to target file at '{Location}'");
+
       try
       {
         using (var writer = new StreamWriter(Location, new FileStreamOptions { Mode = FileMode.Create, Access = FileAccess.Write }))
@@ -65,7 +71,7 @@ namespace Moravia.Homework.DAL
       }
       catch (Exception ex)
       {
-        //todo log
+        _logger.LogError(ex, $"Error writing content to target file");
         throw;
       }
     }
