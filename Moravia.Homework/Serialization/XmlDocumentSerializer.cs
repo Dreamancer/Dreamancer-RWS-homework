@@ -20,7 +20,7 @@ namespace Moravia.Homework.Serialization
     {
       try
       {
-        _logger.Debug($"Input xml string:\n{obj}");
+        _logger.Debug($"Input xml:\n{obj}");
 
         XDocument xdoc = XDocument.Parse(obj);
         xdoc.Root.Name = _documentType.Name;
@@ -33,7 +33,7 @@ namespace Moravia.Homework.Serialization
       }
       catch (Exception ex)
       {
-        _logger.Error(ex, $"Error deserializing xml string into {_documentType}");
+        _logger.Error(ex, $"Error deserializing xml into {_documentType}");
         throw;
       }
     }
@@ -50,7 +50,7 @@ namespace Moravia.Homework.Serialization
           serializer.Serialize(sw, obj);
         }
 
-        _logger.Debug($"Serialized xml string:\n{result}");
+        _logger.Debug($"Serialized xml:\n{result}");
 
         return result.ToString();
       }

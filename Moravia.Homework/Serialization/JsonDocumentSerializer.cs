@@ -20,13 +20,13 @@ namespace Moravia.Homework.Serialization
     {
       try
       {
-        _logger.Debug($"Input json string:\n{obj}");
+        _logger.Debug($"Input json:\n{obj}");
 
         return (IDocument)JsonConvert.DeserializeObject(obj, _documentType);
       }
       catch (Exception ex)
       {
-        _logger.Error(ex, $"Error deserializing json string into {_documentType}");
+        _logger.Error(ex, $"Error deserializing json into {_documentType}");
         throw;
       }
     }
@@ -37,7 +37,7 @@ namespace Moravia.Homework.Serialization
       {
         string jsonString = JsonConvert.SerializeObject(obj);
 
-        _logger.Debug($"Serialized json string:\n{jsonString}");
+        _logger.Debug($"Serialized json:\n{jsonString}");
 
         return jsonString;
       }
