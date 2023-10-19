@@ -24,9 +24,10 @@ namespace Moravia.Homework.Serialization
 
         XmlSerializer serializer = new XmlSerializer(_documentType);
 
-        XDocument xdoc = XDocument.Parse(obj);
+       // XDocument xdoc = XDocument.Parse(obj);
 
-        using (StringReader sr = new StringReader(xdoc.Root.Value))
+      //  xdoc.
+        using (StringReader sr = new StringReader(obj))
         {
           return (IDocument)serializer.Deserialize(sr);
         }

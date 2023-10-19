@@ -18,10 +18,10 @@ namespace Moravia.Homework
     private ConvertorAppSettings _settings;
     private readonly ILogger _logger;
 
-    public DocumentConvertorApp(IOptions<ConvertorAppSettings> settings)
+    public DocumentConvertorApp(IOptions<ConvertorAppSettings> settings, ILogger logger)
     {
       _settings = settings.Value;
-      _logger = Log.Logger;
+      _logger = logger;
     }
 
     public async Task ExecuteDocumentConversionAsync()

@@ -4,7 +4,6 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moravia.Homework.Settings;
-//using Microsoft.Extensions.Logging;
 using Serilog;
 
 namespace Moravia.Homework
@@ -13,32 +12,74 @@ namespace Moravia.Homework
   {
     static async Task Main(string[] args)
     {
-      IConfiguration configuration = new ConfigurationBuilder()
+      string? alternateConfig = GetAlternateConfigPath(args);
+
+      IConfiguration configuration =
+        alternateConfig == null
+        ? new ConfigurationBuilder()
          .SetBasePath(Environment.CurrentDirectory)
          .AddJsonFile("appsettings.json", optional: false)
+         .Build()
+        : new ConfigurationBuilder()
+         .AddJsonFile(alternateConfig, optional: false)
          .Build();
 
       var serviceCollection = new ServiceCollection();
+      ConfigureLogger(serviceCollection);
       ConfigureServices(serviceCollection, configuration);
 
       await serviceCollection.BuildServiceProvider().GetService<DocumentConvertorApp>().ExecuteDocumentConversionAsync();
     }
     private static void ConfigureServices(ServiceCollection serviceCollection, IConfiguration configuration)
     {
-      Log.Logger = new LoggerConfiguration()
-            .ReadFrom.Configuration(configuration)
-            .CreateLogger();
       serviceCollection
-        //  .AddLogging(loggerBuilder =>
-        //{
-
-
-        //  //loggerConf.AddConfiguration(configuration.GetSection("LoggingSettings"));
-        //  // configure.AddConsole();
-        //  loggerBuilder.AddSerilog(logger, dispose: true);
-        //})
         .AddTransient<DocumentConvertorApp>()
         .AddOptions<ConvertorAppSettings>().Bind(configuration.GetSection("ConvertorAppSettings"));
+    }
+
+    private static void ConfigureLogger(ServiceCollection serviceCollection)
+    {
+      IConfiguration loggerConfig =
+        new ConfigurationBuilder()
+         .SetBasePath(Environment.CurrentDirectory)
+         .AddJsonFile("logsettings.json", optional: false)
+         .Build();
+
+      ILogger logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(loggerConfig)
+            .CreateLogger();
+
+       serviceCollection.AddSerilog(logger);
+      //serviceCollection
+      //  .AddLogging(loggerBuilder =>
+      //  {
+      //    loggerBuilder.AddSerilog(logger);
+      //  });
+    }
+
+    private static string? GetAlternateConfigPath(string[] args)
+    {
+      string? alternateConfig = null;
+      if (args.Length == 2)
+      {
+        if (args[0].ToLower() == "-c")
+        {
+          if (File.Exists(args[1]))
+          {
+            alternateConfig = args[1];
+          }
+          else
+          {
+            Console.WriteLine($"invalid config file path {args[1]}");
+          }
+        }
+        else
+        {
+          Console.WriteLine($"ignoring invalid command {args[0]}");
+        }
+      }
+
+      return alternateConfig;
     }
   }
 }

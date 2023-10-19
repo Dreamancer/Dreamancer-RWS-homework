@@ -1,9 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<Data>
-  <Title>
-    Some title
-  </Title>
-  <Text>
-    lorem ipsum and other fun things
-  </Text>
-</Data>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<BaseDocument>
+  <Title>This is the title</Title>
+  <Text>This is the text content</Text>
+</BaseDocument>
