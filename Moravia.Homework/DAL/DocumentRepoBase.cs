@@ -19,7 +19,7 @@ namespace Moravia.Homework.DAL
 
     public DocumentRepoMode Mode { get; protected set; }
 
-    public virtual string Location {get { return _location;}}
+    public virtual string Location { get { return _location; } }
 
 
 
@@ -31,9 +31,7 @@ namespace Moravia.Homework.DAL
     public DocumentRepoBase(DocumentRepoMode mode, string? location, ILogger logger)
     {
       if (String.IsNullOrWhiteSpace(location))
-      {
         throw new ArgumentNullException(nameof(location));
-      }
 
       Mode = mode;
 
@@ -50,16 +48,14 @@ namespace Moravia.Homework.DAL
     public DocumentRepoBase(DocumentRepoSettings settings, ILogger logger)
     {
       if (settings == null)
-      {
         throw new ArgumentNullException(nameof(settings));
-      }
 
       if (String.IsNullOrWhiteSpace(settings.Location))
-      {
         throw new ArgumentNullException(nameof(settings.Location));
-      }
+
 
       Mode = settings.Mode;
+
       _location = settings.Location;
       _logger = logger;
     }
