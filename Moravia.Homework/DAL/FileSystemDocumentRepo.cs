@@ -11,21 +11,22 @@ namespace Moravia.Homework.DAL
 {
   internal class FileSystemDocumentRepo : DocumentRepoBase
   {
+    public override string Location { get { return Path.GetFullPath(_location); } }
 
     public FileSystemDocumentRepo(DocumentRepoMode mode, string? location, ILogger logger) : base(mode, location, logger)
     {
-      if (!File.Exists(Location) && Mode == DocumentRepoMode.Read)
+      if (!File.Exists(location) && Mode == DocumentRepoMode.Read)
       {
-        throw new ArgumentException($"No file at path {Location} to read");
+        throw new ArgumentException($"No file at path {location} to read");
       }
     }
 
     
     public FileSystemDocumentRepo(DocumentRepoSettings settings, ILogger logger) : base(settings, logger)
     {
-      if (!File.Exists(Location) && Mode == DocumentRepoMode.Read)
+      if (!File.Exists(settings.Location) && Mode == DocumentRepoMode.Read)
       {
-        throw new ArgumentException($"No file at path {Location} to read");
+        throw new ArgumentException($"No file at path {settings.Location} to read");
       }
     }
 

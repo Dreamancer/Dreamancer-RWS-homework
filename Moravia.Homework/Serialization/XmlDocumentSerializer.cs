@@ -20,15 +20,14 @@ namespace Moravia.Homework.Serialization
     {
       try
       {
-        _logger.Debug($"input xml string:\n{obj}");
+        _logger.Debug($"Input xml string:\n{obj}");
 
-        XmlSerializer serializer = new XmlSerializer(_documentType);
+        XDocument xdoc = XDocument.Parse(obj);
+        xdoc.Root.Name = _documentType.Name;
 
-       // XDocument xdoc = XDocument.Parse(obj);
-
-      //  xdoc.
-        using (StringReader sr = new StringReader(obj))
+        using (StringReader sr = new StringReader(xdoc.ToString()))
         {
+          XmlSerializer serializer = new XmlSerializer(_documentType);
           return (IDocument)serializer.Deserialize(sr);
         }
       }

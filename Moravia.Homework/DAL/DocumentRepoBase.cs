@@ -9,14 +9,16 @@ using Serilog;
 
 namespace Moravia.Homework.DAL
 {
-    public abstract class DocumentRepoBase : IDocumentRepo
+  public abstract class DocumentRepoBase : IDocumentRepo
   {
+    protected readonly ILogger _logger;
+    protected readonly string _location;
+
     public DocumentRepoMode Mode { get; protected set; }
 
-    public string Location { get; protected set; }
+    public virtual string Location {get { return _location;}}
 
-    
-    protected readonly ILogger _logger;
+
 
     /// <summary>
     /// Base class constructor using basic arguments
@@ -31,8 +33,8 @@ namespace Moravia.Homework.DAL
       }
 
       Mode = mode;
-      Location = location;
 
+      _location = location;
       _logger = logger;
     }
 
@@ -49,7 +51,7 @@ namespace Moravia.Homework.DAL
       }
 
       Mode = settings.Mode;
-      Location = settings.Location;
+      _location = settings.Location;
       _logger = logger;
     }
 
@@ -57,6 +59,6 @@ namespace Moravia.Homework.DAL
 
     public abstract Task<string> WriteToOutputFileAsync(string content);
 
-    
+
   }
 }

@@ -10,25 +10,44 @@ namespace Moravia.Homework
 {
   class Program
   {
+    private static ILogger? _logger;
     static async Task Main(string[] args)
     {
-      string? alternateConfig = GetAlternateConfigPath(args);
+      try
+      {
+        _logger = ConfigureLogger();
 
-      IConfiguration configuration =
-        alternateConfig == null
-        ? new ConfigurationBuilder()
-         .SetBasePath(Environment.CurrentDirectory)
-         .AddJsonFile("appsettings.json", optional: false)
-         .Build()
-        : new ConfigurationBuilder()
-         .AddJsonFile(alternateConfig, optional: false)
-         .Build();
+        string? alternativeConfig = GetAlternativeConfigPath(args);
 
-      var serviceCollection = new ServiceCollection();
-      ConfigureLogger(serviceCollection);
-      ConfigureServices(serviceCollection, configuration);
+        IConfiguration configuration =
+          alternativeConfig == null
+          ? new ConfigurationBuilder()
+           .SetBasePath(Environment.CurrentDirectory)
+           .AddJsonFile("appsettings.json", optional: false)
+           .Build()
+          : new ConfigurationBuilder()
+           .AddJsonFile(alternativeConfig, optional: false)
+           .Build();
 
-      await serviceCollection.BuildServiceProvider().GetService<DocumentConvertorApp>().ExecuteDocumentConversionAsync();
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddSerilog(_logger);
+        ConfigureServices(serviceCollection, configuration);
+
+        await serviceCollection.BuildServiceProvider().GetService<DocumentConvertorApp>().ExecuteDocumentConversionAsync();
+      }
+      catch (Exception ex)
+      {
+        if (_logger != null)
+        {
+          _logger.Fatal(ex, "Error running program");
+        }
+        else
+        {
+          Console.WriteLine("Error running program");
+          Console.Error.WriteLine(ex);
+        }
+        throw;
+      }
     }
     private static void ConfigureServices(ServiceCollection serviceCollection, IConfiguration configuration)
     {
@@ -37,7 +56,7 @@ namespace Moravia.Homework
         .AddOptions<ConvertorAppSettings>().Bind(configuration.GetSection("ConvertorAppSettings"));
     }
 
-    private static void ConfigureLogger(ServiceCollection serviceCollection)
+    private static ILogger ConfigureLogger()
     {
       IConfiguration loggerConfig =
         new ConfigurationBuilder()
@@ -45,41 +64,27 @@ namespace Moravia.Homework
          .AddJsonFile("logsettings.json", optional: false)
          .Build();
 
-      ILogger logger = new LoggerConfiguration()
+      return new LoggerConfiguration()
             .ReadFrom.Configuration(loggerConfig)
             .CreateLogger();
-
-       serviceCollection.AddSerilog(logger);
-      //serviceCollection
-      //  .AddLogging(loggerBuilder =>
-      //  {
-      //    loggerBuilder.AddSerilog(logger);
-      //  });
     }
 
-    private static string? GetAlternateConfigPath(string[] args)
+    private static string? GetAlternativeConfigPath(string[] args)
     {
-      string? alternateConfig = null;
-      if (args.Length == 2)
+      string? alternativeConfig = null;
+      if (args.Length == 1)
       {
-        if (args[0].ToLower() == "-c")
+        if (File.Exists(args[0]))
         {
-          if (File.Exists(args[1]))
-          {
-            alternateConfig = args[1];
-          }
-          else
-          {
-            Console.WriteLine($"invalid config file path {args[1]}");
-          }
+          alternativeConfig = args[0];
         }
         else
         {
-          Console.WriteLine($"ignoring invalid command {args[0]}");
+          throw new ArgumentException($"Invalid alternative config file path {args[0]}");
         }
       }
 
-      return alternateConfig;
+      return alternativeConfig;
     }
   }
 }
