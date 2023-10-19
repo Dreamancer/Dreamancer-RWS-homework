@@ -99,11 +99,11 @@ namespace Moravia.Homework
     /// </summary>
     /// <param name="args"></param>
     /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentException">Gets thrown if the path is invalid</exception>
     private static string? GetAlternativeConfigPath(string[] args)
     {
       string? alternativeConfig = null;
-      if (args.Length == 1)
+      if (args.Length > 0)
       {
         if (File.Exists(args[0]))
         {

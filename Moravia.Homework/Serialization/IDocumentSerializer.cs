@@ -14,7 +14,7 @@ namespace Moravia.Homework.Serialization
   {
     /// <summary>
     /// The Type intended to be (de)serialized.
-    /// Used insted of defining the serializer as generic, because in the intended use with reflection the generic type cannot be provided at runtime
+    /// Used insted of defining the serializer as generic, since with the intended initialization through reflection, the generic type cannot be provided at runtime
     /// </summary>
     public Type DocumentType { get; }
 
