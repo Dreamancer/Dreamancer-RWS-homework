@@ -26,6 +26,7 @@ namespace Moravia.Homework.Serialization
         _logger.Debug($"Input xml:\n{obj}");
 
         XDocument xdoc = XDocument.Parse(obj);
+        //rename the root node to the Type name of the serialized class to prevent 'incorrect xml data' exception
         xdoc.Root.Name = DocumentType.Name;
 
         using (StringReader sr = new StringReader(xdoc.ToString()))
