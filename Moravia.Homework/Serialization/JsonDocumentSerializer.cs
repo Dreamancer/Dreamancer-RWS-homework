@@ -10,11 +10,15 @@ using Serilog;
 
 namespace Moravia.Homework.Serialization
 {
+  /// <summary>
+  /// JSON document serializer implementation
+  /// </summary>
   public class JsonDocumentSerializer : DocumentSerializerBase
   {
     public JsonDocumentSerializer(Type documentType, ILogger logger) : base(documentType, logger)
     {
     }
+
 
     public override IDocument DeserializeDocument(string obj)
     {
@@ -22,11 +26,11 @@ namespace Moravia.Homework.Serialization
       {
         _logger.Debug($"Input json:\n{obj}");
 
-        return (IDocument)JsonConvert.DeserializeObject(obj, _documentType);
+        return (IDocument)JsonConvert.DeserializeObject(obj, DocumentType);
       }
       catch (Exception ex)
       {
-        _logger.Error(ex, $"Error deserializing json into {_documentType}");
+        _logger.Error(ex, $"Error deserializing json into {DocumentType}");
         throw;
       }
     }
@@ -43,7 +47,7 @@ namespace Moravia.Homework.Serialization
       }
       catch (Exception ex)
       {
-        _logger.Error(ex, $"Error serializing {_documentType} to json");
+        _logger.Error(ex, $"Error serializing {DocumentType} to json");
         throw;
       }
     }

@@ -12,6 +12,9 @@ using Serilog;
 
 namespace Moravia.Homework.Serialization
 {
+  /// <summary>
+  /// XML document serializer implementation
+  /// </summary>
   internal class XmlDocumentSerializer : DocumentSerializerBase
   {
     public XmlDocumentSerializer(Type documentType, ILogger logger) : base(documentType, logger) { }
@@ -23,17 +26,17 @@ namespace Moravia.Homework.Serialization
         _logger.Debug($"Input xml:\n{obj}");
 
         XDocument xdoc = XDocument.Parse(obj);
-        xdoc.Root.Name = _documentType.Name;
+        xdoc.Root.Name = DocumentType.Name;
 
         using (StringReader sr = new StringReader(xdoc.ToString()))
         {
-          XmlSerializer serializer = new XmlSerializer(_documentType);
+          XmlSerializer serializer = new XmlSerializer(DocumentType);
           return (IDocument)serializer.Deserialize(sr);
         }
       }
       catch (Exception ex)
       {
-        _logger.Error(ex, $"Error deserializing xml into {_documentType}");
+        _logger.Error(ex, $"Error deserializing xml into {DocumentType}");
         throw;
       }
     }
@@ -42,7 +45,7 @@ namespace Moravia.Homework.Serialization
     {
       try
       {
-        XmlSerializer serializer = new XmlSerializer(_documentType);
+        XmlSerializer serializer = new XmlSerializer(DocumentType);
 
         StringBuilder result = new StringBuilder();
         using (StringWriter sw = new StringWriter(result))
@@ -56,7 +59,7 @@ namespace Moravia.Homework.Serialization
       }
       catch (Exception ex)
       {
-        _logger.Error(ex, $"Error serializing {_documentType} to xml");
+        _logger.Error(ex, $"Error serializing {DocumentType} to xml");
         throw;
       }
     }

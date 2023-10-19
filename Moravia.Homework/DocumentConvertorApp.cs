@@ -15,13 +15,23 @@ using Moravia.Homework.Serialization.Factory;
 
 namespace Moravia.Homework
 {
-    public class DocumentConvertorApp
+  /// <summary>
+  /// Application intended for data format conversion according to configuration provided
+  /// </summary>
+  public class DocumentConvertorApp
   {
     private ConvertorAppSettings _settings;
     private readonly ILogger _logger;
     private readonly IDocumentRepoFactory _documentRepoFactory;
     private readonly IDocumentSerializerFactory _documentSerializerFactory;
 
+    /// <summary>
+    /// DocumentConvertorApp constructor
+    /// </summary>
+    /// <param name="settings">configuration providing information about the source and target files, and their data formats</param>
+    /// <param name="documentRepoFactory">The IDocumentRepoFactory instance used to create IDocumentRepo instances</param>
+    /// <param name="documentSerializerFactory">The IDocumentSerializerFactory instance used to create IDocumentSerializer instances</param>
+    /// <param name="logger">Serilog logger</param>
     public DocumentConvertorApp(IOptions<ConvertorAppSettings> settings, IDocumentRepoFactory documentRepoFactory, IDocumentSerializerFactory documentSerializerFactory, ILogger logger)
     {
       _settings = settings.Value;
@@ -30,6 +40,10 @@ namespace Moravia.Homework
       _documentSerializerFactory = documentSerializerFactory;
     }
 
+    /// <summary>
+    /// Executes the document format conversion
+    /// </summary>
+    /// <returns></returns>
     public async Task ExecuteDocumentConversionAsync()
     {
       try

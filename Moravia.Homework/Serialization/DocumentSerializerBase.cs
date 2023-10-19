@@ -8,13 +8,22 @@ using Serilog;
 
 namespace Moravia.Homework.Serialization
 {
+  /// <summary>
+  /// Base abstract implementation of IDocumentSerializer
+  /// </summary> 
   public abstract class DocumentSerializerBase : IDocumentSerializer
   {
-    protected Type _documentType;
     protected readonly ILogger _logger;
 
-    public Type DocumentType {  get { return _documentType; } }
+    public Type DocumentType { get; }
 
+    /// <summary>
+    /// DocumentSerializerBase constructor
+    /// </summary>
+    /// <param name="documentType"></param>
+    /// <param name="logger"></param>
+    /// <exception cref="ArgumentNullException"></exception>
+    /// <exception cref="ArgumentException"></exception>
     public DocumentSerializerBase(Type documentType, ILogger logger)
     {
       if (documentType == null)
@@ -28,7 +37,7 @@ namespace Moravia.Homework.Serialization
         throw new ArgumentException($"Invalid document type {documentType}");
       }
 
-      _documentType = documentType;
+      DocumentType = documentType;
       _logger = logger;
     }
 

@@ -7,16 +7,19 @@ using System.Threading.Tasks;
 
 namespace Moravia.Homework.DAL
 {
-    public interface IDocumentRepo
+  /// <summary>
+  /// Interface represents basic functionality of a document repository in our app
+  /// </summary>
+  public interface IDocumentRepo
   {
     /// <summary>
-    /// Sets the IDocumentRepo instance to a read or write only mode.
-    /// Must be set in the constructor.
+    /// Indication whether this instance of IDocumentRepo is in a read or write only mode.
+    /// Is set on creation
     /// </summary>
     public DocumentRepoMode Mode { get; }
     /// <summary>
     /// Location of the file we want to read from/write to. a filesystem path, https address, ftp address, etc...
-    /// Must be set in the constructor
+    /// Is set on creation
     /// </summary>
     public string Location { get; }
 

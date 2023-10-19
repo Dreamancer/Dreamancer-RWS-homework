@@ -10,7 +10,10 @@ using Moravia.Homework.Models;
 
 namespace Moravia.Homework.Serialization.Factory
 {
-    public class DocumentSerializerFactory : IDocumentSerializerFactory
+  /// <summary>
+  /// IDocumentSerializerFactory implementation
+  /// </summary>
+  public class DocumentSerializerFactory : IDocumentSerializerFactory
     {
         public IDocumentSerializer GetDocumentSerializer(string serializerTypeName, string documentTypeName, ILogger logger)
         {

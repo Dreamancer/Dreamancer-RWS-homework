@@ -9,6 +9,9 @@ using Serilog;
 
 namespace Moravia.Homework.DAL
 {
+  /// <summary>
+  /// Base abstract implementation of IDocumentRepo
+  /// </summary>
   public abstract class DocumentRepoBase : IDocumentRepo
   {
     protected readonly ILogger _logger;
@@ -21,7 +24,7 @@ namespace Moravia.Homework.DAL
 
 
     /// <summary>
-    /// Base class constructor using basic arguments
+    /// Base class constructor taking configuration from method properties
     /// </summary>
     /// <param name="mode">I/O mode of the repo</param>
     /// <param name="location">location of source/target file.</param>
@@ -38,6 +41,12 @@ namespace Moravia.Homework.DAL
       _logger = logger;
     }
 
+    /// <summary>
+    /// Base class constructor taking configuration from DocumentRepoSettings object
+    /// </summary>
+    /// <param name="settings"></param>
+    /// <param name="logger"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     public DocumentRepoBase(DocumentRepoSettings settings, ILogger logger)
     {
       if (settings == null)
