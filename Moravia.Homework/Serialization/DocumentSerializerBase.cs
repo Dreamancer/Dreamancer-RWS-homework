@@ -13,6 +13,8 @@ namespace Moravia.Homework.Serialization
     protected Type _documentType;
     protected readonly ILogger _logger;
 
+    public Type DocumentType {  get { return _documentType; } }
+
     public DocumentSerializerBase(Type documentType, ILogger logger)
     {
       if (documentType == null)
@@ -20,6 +22,7 @@ namespace Moravia.Homework.Serialization
         throw new ArgumentNullException(nameof(documentType));
       }
 
+      //since we can't define our serializers as generic, we introduce a manual type constraint in constructor
       if (!documentType.GetInterfaces().Contains(typeof(IDocument)))
       {
         throw new ArgumentException($"Invalid document type {documentType}");

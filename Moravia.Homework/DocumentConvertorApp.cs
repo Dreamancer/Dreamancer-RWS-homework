@@ -9,19 +9,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Serilog;
+using Moravia.Homework.DAL.Factory;
+using Moravia.Homework.Serialization.Factory;
 //using Microsoft.Extensions.Logging;
 
 namespace Moravia.Homework
 {
-  public class DocumentConvertorApp
+    public class DocumentConvertorApp
   {
     private ConvertorAppSettings _settings;
     private readonly ILogger _logger;
+    private readonly IDocumentRepoFactory _documentRepoFactory;
+    private readonly IDocumentSerializerFactory _documentSerializerFactory;
 
-    public DocumentConvertorApp(IOptions<ConvertorAppSettings> settings, ILogger logger)
+    public DocumentConvertorApp(IOptions<ConvertorAppSettings> settings, IDocumentRepoFactory documentRepoFactory, IDocumentSerializerFactory documentSerializerFactory, ILogger logger)
     {
       _settings = settings.Value;
       _logger = logger;
+      _documentRepoFactory = documentRepoFactory;
+      _documentSerializerFactory = documentSerializerFactory;
     }
 
     public async Task ExecuteDocumentConversionAsync()
@@ -29,7 +35,7 @@ namespace Moravia.Homework
       try
       {
         //read input from source
-        IDocumentRepo sourceRepo = DocumentRepoFactory.GetDocumentRepo(_settings.Input.RepoSettings, _logger);
+        IDocumentRepo sourceRepo = _documentRepoFactory.GetDocumentRepo(_settings.Input.RepoSettings, _logger);
         _logger.Information($"Source {sourceRepo.GetType()} initiated in {sourceRepo.Mode} mode");
         string sourceContent = await sourceRepo.ReadInputFileAsync();
         if (string.IsNullOrWhiteSpace(sourceContent))
@@ -39,8 +45,8 @@ namespace Moravia.Homework
         _logger.Information($"Source file content loaded successfully");
 
         //deserialize to IDocument
-        IDocumentSerializer deserializer = DocumentSerializerFactory.GetDocumentSerializer(_settings.Input.SerializerTypeName, _settings.Input.DocumentTypeName, _logger);
-        _logger.Information($"Deserializer {deserializer.GetType()} initiated");
+        IDocumentSerializer deserializer = _documentSerializerFactory.GetDocumentSerializer(_settings.Input.SerializerTypeName, _settings.Input.DocumentTypeName, _logger);
+        _logger.Information($"Deserializer {deserializer.GetType()} initiated for document type: {deserializer.DocumentType}");
         IDocument document = deserializer.DeserializeDocument(sourceContent);
         if (document == null)
         {
@@ -49,8 +55,8 @@ namespace Moravia.Homework
         _logger.Information($"Content sucessfully deserialized to {document.GetType()}");
 
         //serialize to target format
-        IDocumentSerializer serializer = DocumentSerializerFactory.GetDocumentSerializer(_settings.Output.SerializerTypeName, _settings.Output.DocumentTypeName, _logger);
-        _logger.Information($"Serializer {serializer.GetType()} initiated");
+        IDocumentSerializer serializer = _documentSerializerFactory.GetDocumentSerializer(_settings.Output.SerializerTypeName, _settings.Output.DocumentTypeName, _logger);
+        _logger.Information($"Serializer {serializer.GetType()} initiated for document type: {serializer.DocumentType}");
         string targetContent = serializer.SerializeDocument(document);
         if (string.IsNullOrWhiteSpace(targetContent))
         {
@@ -59,7 +65,7 @@ namespace Moravia.Homework
         _logger.Information($"{document.GetType()} successfully serialized to target format");
 
         //write converted document to target 
-        IDocumentRepo targetRepo = DocumentRepoFactory.GetDocumentRepo(_settings.Output.RepoSettings, _logger);
+        IDocumentRepo targetRepo = _documentRepoFactory.GetDocumentRepo(_settings.Output.RepoSettings, _logger);
         _logger.Information($"Target {targetRepo.GetType()} initiated in {targetRepo.Mode} mode");
         await targetRepo.WriteToOutputFileAsync(targetContent);
         _logger.Information($"Document format conversion complete. Target file can be found at '{targetRepo.Location}'");

@@ -7,10 +7,29 @@ using System.Threading.Tasks;
 
 namespace Moravia.Homework.Serialization
 {
+  /// <summary>
+  /// Defines document serialization functionality
+  /// </summary>
   public interface IDocumentSerializer
   {
+    /// <summary>
+    /// The Type intended to be (de)serialized.
+    /// Used insted of defining the interface as generic, because in the intended use with reflection the generic type cannot be provided at runtime
+    /// </summary>
+    public Type DocumentType { get; }
+
+    /// <summary>
+    /// Serializes the IDocument instance
+    /// </summary>
+    /// <param name="obj">IDocument object to be serialized</param>
+    /// <returns>string representation of serialized 'obj'</returns>
     string SerializeDocument(IDocument obj);
 
+    /// <summary>
+    /// Deserializes the string representation to a IDocument object
+    /// </summary>
+    /// <param name="obj">string representation of object</param>
+    /// <returns>Deserialized IDocument instance</returns>
     IDocument DeserializeDocument(string obj);
   }
 }
