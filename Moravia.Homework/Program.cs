@@ -5,7 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moravia.Homework.Settings;
 using Serilog;
-
+using Microsoft.Extensions.Logging;
+using ILogger = Serilog.ILogger;
 namespace Moravia.Homework
 {
   class Program
@@ -15,6 +16,7 @@ namespace Moravia.Homework
     {
       try
       {
+        //setup logger 
         _logger = ConfigureLogger();
 
         string? alternativeConfig = GetAlternativeConfigPath(args);
@@ -58,15 +60,27 @@ namespace Moravia.Homework
 
     private static ILogger ConfigureLogger()
     {
-      IConfiguration loggerConfig =
+      IConfiguration loggerConfig;
+      if (File.Exists(Path.Combine(Environment.CurrentDirectory, "logsettings.json")))
+      {
+        loggerConfig =
         new ConfigurationBuilder()
          .SetBasePath(Environment.CurrentDirectory)
          .AddJsonFile("logsettings.json", optional: false)
          .Build();
 
-      return new LoggerConfiguration()
-            .ReadFrom.Configuration(loggerConfig)
-            .CreateLogger();
+        return new LoggerConfiguration()
+              .ReadFrom.Configuration(loggerConfig)
+              .CreateLogger();
+      }
+      else
+      {
+        return new LoggerConfiguration()
+          .MinimumLevel.Is(Serilog.Events.LogEventLevel.Debug)
+          .WriteTo.Console(Serilog.Events.LogEventLevel.Information)
+          .WriteTo.File("./Logs/DocumentConvertorAppLog.log")
+          .CreateLogger();
+      }
     }
 
     private static string? GetAlternativeConfigPath(string[] args)
