@@ -14,7 +14,7 @@ namespace Moravia.Homework.Serialization
   {
 
     /// <summary>
-    /// Serializes the IDocument instance
+    /// Serializes the IDocument
     /// </summary>
     /// <param name="obj">IDocument object to be serialized</param>
     /// <returns>string representation of serialized 'obj'</returns>
@@ -24,7 +24,7 @@ namespace Moravia.Homework.Serialization
     /// Deserializes the string representation to a IDocument object
     /// </summary>
     /// <param name="obj">string representation of object</param>
-    /// <returns>Deserialized IDocument instance</returns>
+    /// <returns>Deserialized IDocument</returns>
     IDocument DeserializeDocument(string obj);
   }
 }
