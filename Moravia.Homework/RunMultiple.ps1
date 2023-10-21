@@ -1,20 +1,21 @@
 # Load the paths from command line, if there are none provided we're gonna use default paths
 if ($args.Length -ge 2) {
-    $source = $args[0]
+    $configSource = $args[0]
     $exePath = $args[1]
 } else {
-    $source = "./AltConfigs/"
-    $exePath = "Moravia.Homework.exe"
+    $configSource = Resolve-Path -Path "./AltConfigs/"
+    $exePath = Resolve-Path -Path "Moravia.Homework.exe"
 }
 
+Write-Host "Application path: '$exePath'"
+Write-Host "Configs path: '$configSource'"
 
-if (Test-Path $source -PathType Container) {
-    Get-ChildItem -Path $source | ForEach-Object {
+if (Test-Path $configSource -PathType Container) {
+    Get-ChildItem -Path $configSource | ForEach-Object {
         $filePath = $_.FullName
-        Write-Host $filePath
         # Start 'Moravia.Homework.exe' with the file path as the first parameter
-        Start-Process -FilePath $exePath -ArgumentList """$filePath"""
+        Start-Process -FilePath $exePath -ArgumentList """$filePath""" 
     }
 } else {
-    Write-Host "Source directory not found: $source"
+    Write-Host "Source directory not found: $configSource"
 }
