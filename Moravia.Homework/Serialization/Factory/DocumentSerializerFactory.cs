@@ -23,27 +23,20 @@ namespace Moravia.Homework.Serialization.Factory
       if (string.IsNullOrEmpty(documentTypeName))
         throw new ArgumentNullException(nameof(documentTypeName));
 
-      Type documentType = Type.GetType(documentTypeName);
-
-      if (documentType == null)
-        throw new ArgumentException($"Invalid documentTypeName value {documentTypeName}");
-
-
-      if (documentType.GetInterface(typeof(IDocument).Name) == null)
-        throw new ArgumentException($"Invalid Type: {documentTypeName} does not implement IDocument");
-
-
       string serializerGenericTypeName = $"{serializerTypeName}`1[{documentTypeName}]";
 
-      Type serializerType = Type.GetType(serializerGenericTypeName);
+      try
+      {
+        Type serializerType = Type.GetType(serializerGenericTypeName);
 
-      if (serializerType == null)
-        throw new ArgumentException($"Invalid serializerTypeName {serializerTypeName}");
+        return (IDocumentSerializer)Activator.CreateInstance(serializerType, logger);
 
-      if (serializerType.GetInterface(typeof(IDocumentSerializer).Name) == null)
-        throw new ArgumentException($"Invalid serializer type to create: '{serializerTypeName}'");
-
-      return (IDocumentSerializer)Activator.CreateInstance(serializerType, logger);
+      }
+      catch (Exception ex)
+      {
+        logger.Error($"Error creating document serializer type '{serializerTypeName}' for '{documentTypeName}'");
+        throw;
+      }
 
     }
   }

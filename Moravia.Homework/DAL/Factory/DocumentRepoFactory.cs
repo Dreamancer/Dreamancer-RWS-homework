@@ -32,16 +32,10 @@ namespace Moravia.Homework.DAL.Factory
       if (string.IsNullOrWhiteSpace(settings.DocumentRepoTypeName))
         throw new ArgumentNullException(nameof(settings.DocumentRepoTypeName), "Parameter 'settings.DocumentRepoTypeName' cannot be null or empty.");
 
-      Type repoType = Type.GetType(settings.DocumentRepoTypeName);
-
-      if (repoType == null)
-        throw new ArgumentException(nameof(settings.DocumentRepoTypeName), "Invalid DocumentRepoTypeName");
-
-      if (!repoType.GetInterfaces().Contains(typeof(IDocumentRepo)))
-        throw new ArgumentException($"Invalid Type: {repoType} does not implement IDocumentRepo.");
-
       try
       {
+        Type repoType = Type.GetType(settings.DocumentRepoTypeName);
+
         return (IDocumentRepo)Activator.CreateInstance(repoType, settings, logger);
       }
       catch (Exception ex)
