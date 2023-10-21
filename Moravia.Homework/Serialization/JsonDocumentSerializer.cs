@@ -13,9 +13,9 @@ namespace Moravia.Homework.Serialization
   /// <summary>
   /// JSON document serializer implementation
   /// </summary>
-  public class JsonDocumentSerializer : DocumentSerializerBase
+  public class JsonDocumentSerializer<T> : DocumentSerializerBase<T> where T : IDocument
   {
-    public JsonDocumentSerializer(Type documentType, ILogger logger) : base(documentType, logger)
+    public JsonDocumentSerializer(ILogger logger) : base(logger)
     {
     }
 
@@ -26,11 +26,11 @@ namespace Moravia.Homework.Serialization
       {
         _logger.Debug($"Input json:\n{obj}");
 
-        return (IDocument)JsonConvert.DeserializeObject(obj, DocumentType);
+        return (IDocument)JsonConvert.DeserializeObject(obj, typeof(T));
       }
       catch (Exception ex)
       {
-        _logger.Error(ex, $"Error deserializing json into {DocumentType}");
+        _logger.Error(ex, $"Error deserializing json into {typeof(T)}");
         throw;
       }
     }
@@ -47,7 +47,7 @@ namespace Moravia.Homework.Serialization
       }
       catch (Exception ex)
       {
-        _logger.Error(ex, $"Error serializing {DocumentType} to json");
+        _logger.Error(ex, $"Error serializing {typeof(T)} to json");
         throw;
       }
     }

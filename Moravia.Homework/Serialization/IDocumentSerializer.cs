@@ -12,11 +12,6 @@ namespace Moravia.Homework.Serialization
   /// </summary>
   public interface IDocumentSerializer
   {
-    /// <summary>
-    /// The Type intended to be (de)serialized.
-    /// Used insted of defining the serializer as generic, since with the intended initialization through reflection, the generic type cannot be provided at runtime
-    /// </summary>
-    public Type DocumentType { get; }
 
     /// <summary>
     /// Serializes the IDocument instance

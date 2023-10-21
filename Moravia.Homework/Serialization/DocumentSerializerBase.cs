@@ -9,13 +9,11 @@ using Serilog;
 namespace Moravia.Homework.Serialization
 {
   /// <summary>
-  /// Base abstract implementation of IDocumentSerializer
+  /// Base abstract implementation of IDocumentSerializer with a generic constraint
   /// </summary> 
-  public abstract class DocumentSerializerBase : IDocumentSerializer
+  public abstract class DocumentSerializerBase<T> : IDocumentSerializer where T : IDocument 
   {
     protected readonly ILogger _logger;
-
-    public Type DocumentType { get; }
 
     /// <summary>
     /// DocumentSerializerBase constructor
@@ -24,17 +22,8 @@ namespace Moravia.Homework.Serialization
     /// <param name="logger"></param>
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="ArgumentException"></exception>
-    public DocumentSerializerBase(Type documentType, ILogger logger)
+    public DocumentSerializerBase(ILogger logger)
     {
-      if (documentType == null)
-        throw new ArgumentNullException(nameof(documentType));
-
-      //since we can't define our serializers as generic, we introduce a manual type constraint in constructor
-      if (!documentType.GetInterfaces().Contains(typeof(IDocument)))
-        throw new ArgumentException($"Invalid document type {documentType}");
-
-
-      DocumentType = documentType;
       _logger = logger;
     }
 

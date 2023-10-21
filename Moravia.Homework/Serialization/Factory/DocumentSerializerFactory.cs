@@ -14,38 +14,37 @@ namespace Moravia.Homework.Serialization.Factory
   /// IDocumentSerializerFactory implementation
   /// </summary>
   public class DocumentSerializerFactory : IDocumentSerializerFactory
+  {
+    public IDocumentSerializer GetDocumentSerializer(string serializerTypeName, string documentTypeName, ILogger logger)
     {
-        public IDocumentSerializer GetDocumentSerializer(string serializerTypeName, string documentTypeName, ILogger logger)
-        {
-            if (string.IsNullOrEmpty(serializerTypeName))
-            {
-                throw new ArgumentNullException(nameof(serializerTypeName));
-            }
-            if (string.IsNullOrEmpty(documentTypeName))
-            {
-                throw new ArgumentNullException(nameof(documentTypeName));
-            }
+      if (string.IsNullOrEmpty(serializerTypeName))
+        throw new ArgumentNullException(nameof(serializerTypeName));
 
-            Type serializerType = Type.GetType(serializerTypeName);
+      if (string.IsNullOrEmpty(documentTypeName))
+        throw new ArgumentNullException(nameof(documentTypeName));
 
-            if (serializerType == null)
-            {
-                throw new ArgumentException(nameof(serializerTypeName));
-            }
+      Type documentType = Type.GetType(documentTypeName);
 
-            Type documentType = Type.GetType(documentTypeName);
+      if (documentType == null)
+        throw new ArgumentException($"Invalid documentTypeName value {documentTypeName}");
 
-            if (documentType == null)
-            {
-                throw new ArgumentException(nameof(documentTypeName));
-            }
 
-            if (!serializerType.GetInterfaces().Contains(typeof(IDocumentSerializer)))
-            {
-                throw new ArgumentException($"Invalid serializer type to create: '{serializerTypeName}'");
-            }
+      if (documentType.GetInterface(typeof(IDocument).Name) == null)
+        throw new ArgumentException($"Invalid Type: {documentTypeName} does not implement IDocument");
 
-            return (IDocumentSerializer)Activator.CreateInstance(serializerType, documentType, logger);
-        }
+
+      string serializerGenericTypeName = $"{serializerTypeName}`1[{documentTypeName}]";
+
+      Type serializerType = Type.GetType(serializerGenericTypeName);
+
+      if (serializerType == null)
+        throw new ArgumentException($"Invalid serializerTypeName {serializerTypeName}");
+
+      if (serializerType.GetInterface(typeof(IDocumentSerializer).Name) == null)
+        throw new ArgumentException($"Invalid serializer type to create: '{serializerTypeName}'");
+
+      return (IDocumentSerializer)Activator.CreateInstance(serializerType, logger);
+
     }
+  }
 }

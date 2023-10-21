@@ -15,9 +15,9 @@ namespace Moravia.Homework.Serialization
   /// <summary>
   /// XML document serializer implementation
   /// </summary>
-  internal class XmlDocumentSerializer : DocumentSerializerBase
+  internal class XmlDocumentSerializer<T> : DocumentSerializerBase<T> where T: IDocument
   {
-    public XmlDocumentSerializer(Type documentType, ILogger logger) : base(documentType, logger) { }
+    public XmlDocumentSerializer(ILogger logger) : base(logger) { }
 
     public override IDocument DeserializeDocument(string obj)
     {
@@ -27,17 +27,17 @@ namespace Moravia.Homework.Serialization
 
         XDocument xdoc = XDocument.Parse(obj);
         //rename the root node to the Type name of the serialized class to prevent 'incorrect xml data' exception
-        xdoc.Root.Name = DocumentType.Name;
+        xdoc.Root.Name = typeof(T).Name;
 
         using (StringReader sr = new StringReader(xdoc.ToString()))
         {
-          XmlSerializer serializer = new XmlSerializer(DocumentType);
-          return (IDocument)serializer.Deserialize(sr);
+          XmlSerializer serializer = new XmlSerializer(typeof(T));
+          return (T)serializer.Deserialize(sr);
         }
       }
       catch (Exception ex)
       {
-        _logger.Error(ex, $"Error deserializing xml into {DocumentType}");
+        _logger.Error(ex, $"Error deserializing xml into {typeof(T)}");
         throw;
       }
     }
@@ -46,7 +46,7 @@ namespace Moravia.Homework.Serialization
     {
       try
       {
-        XmlSerializer serializer = new XmlSerializer(DocumentType);
+        XmlSerializer serializer = new XmlSerializer(typeof(T));
 
         StringBuilder result = new StringBuilder();
         using (StringWriter sw = new StringWriter(result))
@@ -60,7 +60,7 @@ namespace Moravia.Homework.Serialization
       }
       catch (Exception ex)
       {
-        _logger.Error(ex, $"Error serializing {DocumentType} to xml");
+        _logger.Error(ex, $"Error serializing {typeof(T)} to xml");
         throw;
       }
     }

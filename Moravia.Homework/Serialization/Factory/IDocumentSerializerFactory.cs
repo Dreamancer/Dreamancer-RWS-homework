@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using Moravia.Homework.Models;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;

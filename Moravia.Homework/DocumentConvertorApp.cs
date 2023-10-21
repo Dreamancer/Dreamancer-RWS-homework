@@ -60,7 +60,7 @@ namespace Moravia.Homework
 
         //deserialize to IDocument
         IDocumentSerializer deserializer = _documentSerializerFactory.GetDocumentSerializer(_settings.Input.SerializerTypeName, _settings.Input.DocumentTypeName, _logger);
-        _logger.Information($"Deserializer {deserializer.GetType()} initiated for document type: {deserializer.DocumentType}");
+        _logger.Information($"Deserializer {deserializer.GetType()} initiated for document type: {deserializer.GetType().GetGenericArguments().FirstOrDefault()}");
         IDocument document = deserializer.DeserializeDocument(sourceContent);
         if (document == null)
         {
@@ -70,7 +70,7 @@ namespace Moravia.Homework
 
         //serialize to target format
         IDocumentSerializer serializer = _documentSerializerFactory.GetDocumentSerializer(_settings.Output.SerializerTypeName, _settings.Output.DocumentTypeName, _logger);
-        _logger.Information($"Serializer {serializer.GetType()} initiated for document type: {serializer.DocumentType}");
+        _logger.Information($"Serializer {serializer.GetType()} initiated for document type: {serializer.GetType().GetGenericArguments().FirstOrDefault()}");
         string targetContent = serializer.SerializeDocument(document);
         if (string.IsNullOrWhiteSpace(targetContent))
         {
