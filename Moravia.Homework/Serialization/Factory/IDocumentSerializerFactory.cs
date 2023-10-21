@@ -16,8 +16,7 @@ namespace Moravia.Homework.Serialization.Factory
     /// </summary>
     /// <param name="serializerTypeName">The type name of IDocumentSerializer derived type we want to create</param>
     /// <param name="documentTypeName">The type name of IDocument derived type we want to serialize with created serializer</param>
-    /// <param name="logger">Serilog ILogger</param>
     /// <returns>IDocumentSerializer</returns>
-    public IDocumentSerializer GetDocumentSerializer(string serializerTypeName, string documentTypeName, ILogger logger);
+    public IDocumentSerializer GetDocumentSerializer(string serializerTypeName, string documentTypeName);
   }
 }

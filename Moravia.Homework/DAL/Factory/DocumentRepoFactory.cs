@@ -13,6 +13,11 @@ namespace Moravia.Homework.DAL.Factory
   /// </summary>
   public class DocumentRepoFactory : IDocumentRepoFactory
   {
+    private readonly ILogger _logger;
+    public DocumentRepoFactory(ILogger logger)
+    {
+      _logger = logger;
+    }
 
     /// <summary>
     /// Gets an instance of an object that implements the IDocumentRepo interface based on the provided settings.
@@ -24,7 +29,7 @@ namespace Moravia.Homework.DAL.Factory
     /// <exception cref="ArgumentException">
     /// Thrown when the specified DocumentRepoTypeName is not a valid type or does not implement IDocumentRepo.
     /// </exception>
-    public IDocumentRepo GetDocumentRepo(DocumentRepoSettings settings, ILogger logger)
+    public IDocumentRepo GetDocumentRepo(DocumentRepoSettings settings)
     {
       if (settings is null)
         throw new ArgumentNullException(nameof(settings), "Parameter 'settings' cannot be null.");
@@ -36,11 +41,11 @@ namespace Moravia.Homework.DAL.Factory
       {
         Type repoType = Type.GetType(settings.DocumentRepoTypeName);
 
-        return (IDocumentRepo)Activator.CreateInstance(repoType, settings, logger);
+        return (IDocumentRepo)Activator.CreateInstance(repoType, settings, _logger);
       }
       catch (Exception ex)
       {
-        logger.Error(ex, $"Error creating an instance of '{settings.DocumentRepoTypeName}");
+        _logger.Error(ex, $"Error creating an instance of '{settings.DocumentRepoTypeName}");
         throw;
       }
     }

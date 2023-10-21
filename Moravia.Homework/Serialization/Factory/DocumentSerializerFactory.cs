@@ -15,7 +15,14 @@ namespace Moravia.Homework.Serialization.Factory
   /// </summary>
   public class DocumentSerializerFactory : IDocumentSerializerFactory
   {
-    public IDocumentSerializer GetDocumentSerializer(string serializerTypeName, string documentTypeName, ILogger logger)
+    private readonly ILogger _logger;
+
+    public DocumentSerializerFactory(ILogger logger)
+    {
+      _logger = logger;
+    }
+
+    public IDocumentSerializer GetDocumentSerializer(string serializerTypeName, string documentTypeName)
     {
       if (string.IsNullOrEmpty(serializerTypeName))
         throw new ArgumentNullException(nameof(serializerTypeName));
@@ -29,12 +36,12 @@ namespace Moravia.Homework.Serialization.Factory
       {
         Type serializerType = Type.GetType(serializerGenericTypeName);
 
-        return (IDocumentSerializer)Activator.CreateInstance(serializerType, logger);
+        return (IDocumentSerializer)Activator.CreateInstance(serializerType, _logger);
 
       }
       catch (Exception ex)
       {
-        logger.Error(ex, $"Error creating document serializer type '{serializerTypeName}' for '{documentTypeName}'");
+        _logger.Error(ex, $"Error creating document serializer type '{serializerTypeName}' for '{documentTypeName}'");
         throw;
       }
 

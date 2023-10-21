@@ -19,6 +19,6 @@ namespace Moravia.Homework.DAL.Factory
     /// <param name="settings">The settings for creating the document repository instance.</param>
     /// <param name="logger">A logger intance.</param>
     /// <returns>An instance of an object that implements the IDocumentRepo interface.</returns>
-    public IDocumentRepo GetDocumentRepo(DocumentRepoSettings settings, ILogger logger);
+    public IDocumentRepo GetDocumentRepo(DocumentRepoSettings settings);
   }
 }
