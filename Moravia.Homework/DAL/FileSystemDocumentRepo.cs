@@ -11,6 +11,9 @@ namespace Moravia.Homework.DAL
 {
   internal class FileSystemDocumentRepo : DocumentRepoBase
   {
+    /// <summary>
+    /// Gets full path of the file
+    /// </summary>
     public override string Location { get { return Path.GetFullPath(_location); } }
 
     /// <summary>

@@ -34,7 +34,7 @@ namespace Moravia.Homework.Serialization.Factory
       }
       catch (Exception ex)
       {
-        logger.Error($"Error creating document serializer type '{serializerTypeName}' for '{documentTypeName}'");
+        logger.Error(ex, $"Error creating document serializer type '{serializerTypeName}' for '{documentTypeName}'");
         throw;
       }
 

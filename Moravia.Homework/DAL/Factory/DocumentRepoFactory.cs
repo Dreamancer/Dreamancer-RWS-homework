@@ -40,7 +40,7 @@ namespace Moravia.Homework.DAL.Factory
       }
       catch (Exception ex)
       {
-        logger.Error($"Error creating an instance of '{settings.DocumentRepoTypeName}': {ex.Message}");
+        logger.Error(ex, $"Error creating an instance of '{settings.DocumentRepoTypeName}");
         throw;
       }
     }
