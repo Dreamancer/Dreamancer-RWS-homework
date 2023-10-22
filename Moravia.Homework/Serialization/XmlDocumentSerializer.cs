@@ -15,7 +15,7 @@ namespace Moravia.Homework.Serialization
   /// <summary>
   /// XML document serializer implementation
   /// </summary>
-  internal class XmlDocumentSerializer<T> : DocumentSerializerBase<T> where T: IDocument
+  public class XmlDocumentSerializer<T> : DocumentSerializerBase<T> where T : IDocument
   {
     public XmlDocumentSerializer(ILogger logger) : base(logger) { }
 
@@ -44,6 +44,9 @@ namespace Moravia.Homework.Serialization
 
     public override string SerializeDocument(IDocument obj)
     {
+      if (obj == null)
+        throw new ArgumentNullException(nameof(obj));
+
       try
       {
         XmlSerializer serializer = new XmlSerializer(typeof(T));

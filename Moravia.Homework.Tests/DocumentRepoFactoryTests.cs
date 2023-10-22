@@ -32,18 +32,15 @@ namespace Moravia.Homework.Tests
     [Test]
     public void GetDocumentRepo_ValidSettings_ReturnsCorrectTypeAndMode()
     {
-      // Arrange
       var validSettings = new DocumentRepoSettings
       {
-        DocumentRepoTypeName = "Moravia.Homework.DAL.FileSystemDocumentRepo",
+        DocumentRepoTypeName = "FileSystemDocumentRepo",
         Mode = DocumentRepoMode.Read,
         Location = _filePath
       };
 
-      // Act
       var documentRepo = documentRepoFactory.GetDocumentRepo(validSettings);
 
-      // Assert
       Assert.IsInstanceOf<IDocumentRepo>(documentRepo);
       Assert.IsInstanceOf<FileSystemDocumentRepo>(documentRepo);
       Assert.AreEqual(validSettings.Mode, documentRepo.Mode);
@@ -52,7 +49,6 @@ namespace Moravia.Homework.Tests
     [Test]
     public void GetDocumentRepo_InvalidType_ThrowsArgumentException()
     {
-      // Arrange
       var invalidSettings = new DocumentRepoSettings
       {
         DocumentRepoTypeName = "InvalidTypeName", // Incorrect type name
@@ -60,24 +56,21 @@ namespace Moravia.Homework.Tests
         Location = _filePath
       };
 
-      // Act & Assert
       Assert.Throws<ArgumentException>(() => documentRepoFactory.GetDocumentRepo(invalidSettings));
     }
 
     [Test]
     public void GetDocumentRepo_NullSettings_ThrowsArgumentNullException()
     {
-      // Arrange
-      DocumentRepoSettings nullSettings = null;
+      DocumentRepoSettings? nullSettings = null;
 
-      // Act & Assert
+
       Assert.Throws<ArgumentNullException>(() => documentRepoFactory.GetDocumentRepo(nullSettings));
     }
 
     [Test]
     public void GetDocumentRepo_NullTypeName_ThrowsArgumentNullException()
     {
-      // Arrange
       var settings = new DocumentRepoSettings
       {
         DocumentRepoTypeName = null, // Null type name
@@ -85,7 +78,7 @@ namespace Moravia.Homework.Tests
         Location = "SampleLocation"
       };
 
-      // Act & Assert
+
       Assert.Throws<ArgumentNullException>(() => documentRepoFactory.GetDocumentRepo(settings));
     }
   }

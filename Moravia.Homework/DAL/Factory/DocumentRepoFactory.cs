@@ -31,13 +31,13 @@ namespace Moravia.Homework.DAL.Factory
     /// </exception>
     public IDocumentRepo GetDocumentRepo(DocumentRepoSettings settings)
     {
-      if (settings is null)
+      if (settings == null)
         throw new ArgumentNullException(nameof(settings), "Parameter 'settings' cannot be null.");
 
       if (string.IsNullOrWhiteSpace(settings.DocumentRepoTypeName))
         throw new ArgumentNullException(nameof(settings.DocumentRepoTypeName), "Parameter 'settings.DocumentRepoTypeName' cannot be null or empty.");
 
-      Type? repoType = Type.GetType(settings.DocumentRepoTypeName, false);
+      Type? repoType = Type.GetType($"Moravia.Homework.DAL.{settings.DocumentRepoTypeName}", false);
 
       if (repoType == null)
       {

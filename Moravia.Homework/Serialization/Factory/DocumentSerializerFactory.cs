@@ -30,11 +30,20 @@ namespace Moravia.Homework.Serialization.Factory
       if (string.IsNullOrEmpty(documentTypeName))
         throw new ArgumentNullException(nameof(documentTypeName));
 
-      string serializerGenericTypeName = $"{serializerTypeName}`1[{documentTypeName}]";
+      Type? modelType = Type.GetType($"Moravia.Homework.Models.{documentTypeName}", false);
+
+      if (modelType == null)
+        throw new ArgumentException($"Invalid document type name: {documentTypeName}");
+
+      string serializerGenericTypeName = $"Moravia.Homework.Serialization.{serializerTypeName}`1[{modelType.FullName}]";
+
+      Type? serializerType = Type.GetType(serializerGenericTypeName, false);
+
+      if (serializerType == null)
+        throw new ArgumentException($"Invalid serializer type name {serializerTypeName}");
 
       try
       {
-        Type serializerType = Type.GetType(serializerGenericTypeName);
 
         return (IDocumentSerializer)Activator.CreateInstance(serializerType, _logger);
 

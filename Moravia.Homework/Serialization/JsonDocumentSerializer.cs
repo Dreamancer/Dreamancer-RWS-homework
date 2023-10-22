@@ -37,6 +37,9 @@ namespace Moravia.Homework.Serialization
 
     public override string SerializeDocument(IDocument obj)
     {
+      if (obj == null)
+        throw new ArgumentNullException(nameof(obj));
+
       try
       {
         string jsonString = JsonConvert.SerializeObject(obj);
