@@ -19,7 +19,7 @@
       - O tvorbu týchto modulov sa stará továreň *Moravia.Homework.Serialization.Factory.DocumentSerializerFactory* ktorá ich obdobne tvorí pomocou nastavení poskytnutých z konfiguračného json súboru a je poskytovaná pomocou DI.
 
     - Triedy dediace z *Moravia.Homework.Models.IDocument* predstavujú modely/šablóny serializovaných dokumentov
-    - Aplikácia používa Serilog na logovanie INF + ERR úrovne na štandartný konzolový výstup a INF + DBG + ERR úrovne do log súborov. Serilog je nastavobaný zo samostatného (priložebého) json súboru, no aplikácia obsahuje aj default inicializáciu logeru v prípade žiadnych nastavení.
+    - Aplikácia používa Serilog na logovanie INF + ERR úrovne na štandartný konzolový výstup a INF + DBG + ERR úrovne do log súborov. Serilog je nastavovaný zo samostatného (priložebého) json súboru, no aplikácia obsahuje aj default inicializáciu logeru v prípade žiadnych nastavení.
     - Nastavenie aplikácie **appsettings.json**:
       - **ConvertorAppSettings** obsahuje 2 objekty **Input** a **Output** rovnakého typu (*DataFormatConversionSettings*). Tieto obsahujú nastavenie pre repository obsahujúce zdrojový/cieľový súbor a serializačné nastavenia.
         - **SerializerTypeName** Meno triedy serializéru, ktorý chceme použiť. Tiež nastavuje typ formátu serializovaného súboru. Môže byť *(potenciálne zatiaľ)* *JsonDocumentSerializer* alebo *XmlDocumentSerializer*.
