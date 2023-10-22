@@ -37,10 +37,15 @@ namespace Moravia.Homework.DAL.Factory
       if (string.IsNullOrWhiteSpace(settings.DocumentRepoTypeName))
         throw new ArgumentNullException(nameof(settings.DocumentRepoTypeName), "Parameter 'settings.DocumentRepoTypeName' cannot be null or empty.");
 
+      Type? repoType = Type.GetType(settings.DocumentRepoTypeName, false);
+
+      if (repoType == null)
+      {
+        throw new ArgumentException($"Invalid type name {settings.DocumentRepoTypeName}");
+      }
+
       try
       {
-        Type repoType = Type.GetType(settings.DocumentRepoTypeName);
-
         return (IDocumentRepo)Activator.CreateInstance(repoType, settings, _logger);
       }
       catch (Exception ex)
