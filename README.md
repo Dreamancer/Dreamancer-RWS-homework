@@ -26,8 +26,8 @@
         - **DocumentTypeName** Meno modelu serializovaného dokumentu. Môže byť *(potenciálne zatiaľ)* len *BaseDocument*.
         - **RepoSettings** Obsahuje nastavenia pre IO operácie.
           - **Location** Lokácia zdrojového alebo cieľového súboru. V našej implementácií je to cesta k súboru v súborovom systéme.
-          - **Mode** Slúźi ako safeguard pri IO inicializácií *(FileSystemDocumentRepo)* aby sa zabránilo nechcenému prepisovaniu súborov. Môže byť *Read/Write*.
-          - **DocumentRepoTypeName** Meno repository triedy, ktorá sa stará o IO operácie. Tiež určuje typ súborového systému kde je zdrojový/cieľový súbor uložený.
+          - **Mode** Slúźi ako safeguard pri IO inicializácií aby sa zabránilo nechcenému prepisovaniu súborov. Môže byť *Read/Write*.
+          - **DocumentRepoTypeName** Meno repository triedy, ktorá sa stará o IO operácie. Tiež určuje typ súborového systému kde je zdrojový/cieľový súbor uložený. Môže byť *(potenciálne zatiaľ)* len *FileSystemDocumentRepo*
     - Projekt obsahuje aj powershell skript **RunMultiple.ps1**, ktorý predstavuje ukážku ako by sa aplikácia dala pustit hromadne s rôznymi nastaveniami.
     - Kód je dúfam dostatočne okomentovaný apoň na úrovni metód a tried, kde som (ak som uznal za vhodné) aj odôvodnil moj návrh.
   - Projekt **Moravia.Homework.Tests** obsahuje basic NUnit testy.
