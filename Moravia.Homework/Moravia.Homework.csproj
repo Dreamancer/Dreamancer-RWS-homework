@@ -25,10 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="TargetFiles\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="AltConfigs\appsettings_json_to_xml3.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

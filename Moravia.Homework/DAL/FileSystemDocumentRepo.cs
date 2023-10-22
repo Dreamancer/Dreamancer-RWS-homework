@@ -9,7 +9,7 @@ using Serilog;
 
 namespace Moravia.Homework.DAL
 {
-  internal class FileSystemDocumentRepo : DocumentRepoBase
+  public class FileSystemDocumentRepo : DocumentRepoBase
   {
     /// <summary>
     /// Gets full path of the file

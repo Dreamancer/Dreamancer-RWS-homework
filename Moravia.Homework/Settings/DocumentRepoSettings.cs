@@ -15,7 +15,7 @@ namespace Moravia.Homework.Settings
     /// <summary>
     /// Type name of IDocumentRepo implementation to be used to store/retrieve data to be serialized/deserialized
     /// </summary>
-    public string DocumentRepoTypeName { get; set; }
+    public string? DocumentRepoTypeName { get; set; }
 
     /// <summary>
     /// I/O mode of the document repository to be used. Can be either 'Read' or 'Write'.
